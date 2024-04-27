@@ -163,10 +163,10 @@ def login():
             class App(customtkinter.CTk):
                 def __init__(self, *args, **kwargs,):
                     super().__init__(*args, **kwargs)
-                    
+
                     #this is where you want to build your main app
               
-                    self.title("Riot")
+                    self.title("Python App Template")
                     self.geometry(f"{1100}x{580}")
 
             if __name__ == "__main__":
