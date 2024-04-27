@@ -183,11 +183,6 @@ def login():
             msg = CTkMessagebox(title="Already logged in!", message="Account already logged in!",
             icon="warning", option_1="retry")
 
-        elif response.status_code == 801:
-            print(red("error 801 \nUser has entered the wrong password"))
-            msg = CTkMessagebox(title="Dassword invalid!", message="User has entered the wrong password!",
-            icon="warning", option_1="retry")
-
         else:
             print(red("error 401 \nLogin Information Is Invalid"))
             msg = CTkMessagebox(title="Login Failure!", message="Login Info Invalid",

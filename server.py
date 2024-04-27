@@ -126,6 +126,14 @@ SSL_CONTEXT = ('cert.pem', 'key.pem')
 HOST = '127.0.0.1'
 PORT =  6001
 
+active_users = {
+    
+}
+
+banned = {
+
+}
+
 ssl_cert = os.path.join(os.path.dirname(__file__), 'your_cert.pem')
 ssl_key = os.path.join(os.path.dirname(__file__), 'your_key.pem')
 
@@ -174,6 +182,18 @@ def login():
 
     user_data = load_user_data()
     
+    if username in active_users:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message = f" user `{username}` attempted to login more than once `{current_time}`"
+        send_discord_notification(message)
+        return 'User Attempted to login more than once.', 601
+
+    if username in banned:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message = f"Banned user `{username}` has attempted to login but was denied access `{current_time}`"
+        send_discord_notification(message)
+        return 'user banned', 501
+
     if validate_credentials(username, password, user_data):
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         message = f"`{username}` has logged in at `{current_time}`"
