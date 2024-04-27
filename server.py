@@ -127,7 +127,7 @@ HOST = '127.0.0.1'
 PORT =  6001
 
 active_users = {
-    
+
 }
 
 banned = {
@@ -207,6 +207,29 @@ def login():
         message2 = f"`{username}` has failed to login `{current_time}`"
         send_discord_notification(message2)
         return 'Invalid credentials', 401
+    
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    ip_address = request.remote_addr
+    user_data = load_user_data()
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    if username in user_data:
+        message1 = f" user attempted to signup using `{username}` but is already taken `{current_time}`"
+        send_discord_notification(message1)
+        return 'Username already exists. Please choose a different one.', 301
+    
+    hashed_password = hash_password(password)
+    hashed_ip = hash_password(ip_address)
+    user_data[username] = [hashed_password, hashed_ip]
+    save_user_data(user_data)
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    message = f"`{username}` has signed up at `{current_time}`"
+    send_discord_notification(message)
+    return 'Signup successful', 200
 
 if __name__ == '__main__':
     import threading
